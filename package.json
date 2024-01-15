@@ -1,12 +1,11 @@
 {
   "name": "vscode-semantic-tokens",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Utility library to get all the semantic tokens from a VS Code document in a nicer way",
   "source": "src/index.ts",
   "types": "dist/index.d.ts",
   "main": "dist/index.js",
-  "module": "dist/esm/index.mjs",
-  "type": "module",
+  "module": "dist/esm/index.js",
   "scripts": {
     "lint": "eslint ./src",
     "format": "npx prettier ./src --check",
