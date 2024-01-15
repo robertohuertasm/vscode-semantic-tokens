@@ -1,0 +1,44 @@
+{
+  "name": "vscode-semantic-tokens",
+  "version": "1.0.0",
+  "description": "Utility library to get all the semantic tokens from a VS Code document in a nicer way",
+  "source": "src/index.ts",
+  "types": "dist/index.d.ts",
+  "main": "dist/index.js",
+  "module": "dist/esm/index.mjs",
+  "type": "module",
+  "scripts": {
+    "lint": "eslint ./src",
+    "format": "npx prettier ./src --check",
+    "build:esm": "tsc",
+    "build:cjs": "tsc -p tsconfig.cjs.json",
+    "build": "rimraf dist && npm run build:esm && npm run build:cjs",
+    "clean": "rimraf dist node_modules"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/robertohuertasm/vscode-semantic-tokens.git"
+  },
+  "keywords": [
+    "vscode",
+    "semantic",
+    "tokens",
+    "tokens"
+  ],
+  "author": "Roberto Huertas",
+  "email": "roberto.huertas@outlook.com",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/robertohuertasm/vscode-semantic-tokens/issues"
+  },
+  "homepage": "https://github.com/robertohuertasm/vscode-semantic-tokens#readme",
+  "devDependencies": {
+    "@types/vscode": "^1.79.1",
+    "@typescript-eslint/eslint-plugin": "^6.19.0",
+    "@typescript-eslint/parser": "^6.19.0",
+    "eslint": "^8.56.0",
+    "prettier": "^3.2.2",
+    "rimraf": "^5.0.5",
+    "typescript": "^5.3.3"
+  }
+}
