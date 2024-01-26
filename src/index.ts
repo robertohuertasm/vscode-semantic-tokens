@@ -51,9 +51,14 @@ function buildTokens(
         ? (prev?.startChar || 0) + deltaStart
         : deltaStart;
 
-    const text = document
-      .lineAt(currentLine)
-      .text.substring(currentStart, currentStart + length);
+    const text = document.getText(
+      new vscode.Range(
+        currentLine,
+        currentStart,
+        currentLine,
+        currentStart + length,
+      ),
+    );
 
     const currentToken: SemanticToken = {
       line: currentLine,
