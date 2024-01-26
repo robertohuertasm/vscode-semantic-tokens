@@ -1,6 +1,6 @@
 {
   "name": "vscode-semantic-tokens",
-  "version": "1.0.3",
+  "version": "1.1.0",
   "description": "Utility library to get all the semantic tokens from a VS Code document in a nicer way",
   "source": "src/index.ts",
   "types": "dist/index.d.ts",

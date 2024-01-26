@@ -76,13 +76,12 @@ function buildTokens(
 }
 
 function buildModifiers(modifiers: number, tokenModifiers: string[]): string[] {
-  const binary = modifiers.toString(2);
-  const reversed = binary.split('').reverse();
-
-  return reversed.reduce((acc, _cur, i) => {
-    if (reversed[i] === '1') {
-      return [...acc, tokenModifiers[i]];
+  const result: string[] = [];
+  for (let i = tokenModifiers.length - 1; i >= 0; i--) {
+    const mask = 1 << i;
+    if ((modifiers & mask) === mask) {
+      result.push(tokenModifiers[i]);
     }
-    return acc;
-  }, [] as string[]);
+  }
+  return result;
 }
