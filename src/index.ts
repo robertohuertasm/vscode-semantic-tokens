@@ -10,26 +10,25 @@ export type SemanticToken = {
 };
 
 export async function getSemanticTokens(document: vscode.TextDocument) {
-  // get legends for the current document
-  const legends: vscode.SemanticTokensLegend =
-    await vscode.commands.executeCommand(
+  const [legends, tokens] = (await Promise.all([
+    vscode.commands.executeCommand(
       'vscode.provideDocumentSemanticTokensLegend',
       document.uri,
-    );
-  // get semantic tokens for the current document
-  const tokens: vscode.SemanticTokens = await vscode.commands.executeCommand(
-    'vscode.provideDocumentSemanticTokens',
-    document.uri,
-  );
+    ),
+    vscode.commands.executeCommand(
+      'vscode.provideDocumentSemanticTokens',
+      document.uri,
+    ),
+  ])) as [vscode.SemanticTokensLegend, vscode.SemanticTokens];
   // enrich tokens with legend information
   return buildTokens(tokens, legends, document);
 }
 
-async function buildTokens(
+function buildTokens(
   tokens: vscode.SemanticTokens,
   legends: vscode.SemanticTokensLegend,
   document: vscode.TextDocument,
-): Promise<SemanticToken[]> {
+): SemanticToken[] {
   const richTokens: SemanticToken[] = [];
 
   if (!tokens) {
