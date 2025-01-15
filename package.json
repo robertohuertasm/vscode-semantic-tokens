@@ -1,6 +1,6 @@
 {
   "name": "vscode-semantic-tokens",
-  "version": "1.1.0",
+  "version": "2.0.0",
   "description": "Utility library to get all the semantic tokens from a VS Code document in a nicer way",
   "type": "module",
   "source": "src/index.ts",
@@ -22,7 +22,6 @@
   "keywords": [
     "vscode",
     "semantic",
-    "tokens",
     "tokens"
   ],
   "author": "Roberto Huertas",

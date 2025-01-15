@@ -1,4 +1,4 @@
-import * as vscode from 'vscode';
+import * as vscode from "vscode";
 
 export type SemanticToken = {
   text: string;
@@ -9,25 +9,38 @@ export type SemanticToken = {
   tokenModifiers: string[];
 };
 
-export async function getSemanticTokens(document: vscode.TextDocument) {
+// overloads
+export async function getSemanticTokens(
+  document: vscode.TextDocument,
+): Promise<SemanticToken[]>;
+export async function getSemanticTokens(
+  uri: vscode.Uri,
+  content: string,
+): Promise<SemanticToken[]>;
+
+//implementation
+export async function getSemanticTokens(
+  arg1: vscode.TextDocument | vscode.Uri,
+  arg2?: string,
+): Promise<SemanticToken[]> {
+  const uri: vscode.Uri = arg1 instanceof vscode.Uri ? arg1 : arg1.uri;
+  const content = arg1 instanceof vscode.Uri ? arg2 : arg1.getText();
+
   const [legends, tokens] = (await Promise.all([
     vscode.commands.executeCommand(
-      'vscode.provideDocumentSemanticTokensLegend',
-      document.uri,
+      "vscode.provideDocumentSemanticTokensLegend",
+      uri,
     ),
-    vscode.commands.executeCommand(
-      'vscode.provideDocumentSemanticTokens',
-      document.uri,
-    ),
+    vscode.commands.executeCommand("vscode.provideDocumentSemanticTokens", uri),
   ])) as [vscode.SemanticTokensLegend, vscode.SemanticTokens];
   // enrich tokens with legend information
-  return buildTokens(tokens, legends, document);
+  return buildTokens(tokens, legends, content);
 }
 
 function buildTokens(
   tokens: vscode.SemanticTokens,
   legends: vscode.SemanticTokensLegend,
-  document: vscode.TextDocument,
+  content: string,
 ): SemanticToken[] {
   const richTokens: SemanticToken[] = [];
 
@@ -51,7 +64,8 @@ function buildTokens(
         ? (prev?.startChar || 0) + deltaStart
         : deltaStart;
 
-    const text = document.getText(
+    const text = getTextFromContent(
+      content,
       new vscode.Range(
         currentLine,
         currentStart,
@@ -84,4 +98,27 @@ function buildModifiers(modifiers: number, tokenModifiers: string[]): string[] {
     }
   }
   return result;
+}
+
+function getTextFromContent(content: string, range: vscode.Range): string {
+  const lines = content.split("\n"); // Split the content into lines
+
+  const startLine = range.start.line;
+  const startCharacter = range.start.character;
+  const endLine = range.end.line;
+  const endCharacter = range.end.character;
+
+  // If the range spans a single line
+  if (startLine === endLine) {
+    return lines[startLine].slice(startCharacter, endCharacter);
+  }
+
+  // If the range spans multiple lines
+  const selectedLines = lines.slice(startLine, endLine + 1);
+  selectedLines[0] = selectedLines[0].slice(startCharacter); // Trim the first line
+  selectedLines[selectedLines.length - 1] = selectedLines[
+    selectedLines.length - 1
+  ].slice(0, endCharacter); // Trim the last line
+
+  return selectedLines.join("\n"); // Join the selected lines with newlines
 }
